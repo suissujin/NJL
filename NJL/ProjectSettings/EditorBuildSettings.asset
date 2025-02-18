@@ -5,10 +5,24 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/OutdoorsScene.unity
     guid: 8124e5870f4fd4c779e7a5f994e84ad1
+  - enabled: 1
+    path: Assets/_Scenes/0. Menu.unity
+    guid: 517710ebae5c0d840be925ae83695fc0
+  - enabled: 1
+    path: Assets/_Scenes/1. Main.unity
+    guid: 585eb784eb6e81c4d9dacb4c91ebba4b
+  - enabled: 1
+    path: Assets/_Scenes/2. Minigame1.unity
+    guid: 9ca40c5181e5e444e8c3110fa62f00f0
+  - enabled: 1
+    path: Assets/_Scenes/3. Minigame2.unity
+    guid: 08e46c1d08c669a4a830e1807f27450b
+  - enabled: 1
+    path: Assets/_Scenes/3. Minigame3.unity
+    guid: b94976117a51b17418b3068be8f2056a
   m_configObjects:
-    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 35845fe01580c41289b024647b1d1c53,
-      type: 3}
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 68b874bf07a70214aa42019806910204, type: 3}
   m_UseUCBPForAssetBundles: 0
