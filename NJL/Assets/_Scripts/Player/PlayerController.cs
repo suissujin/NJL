@@ -13,19 +13,24 @@ public class PlayerController : MonoBehaviour
     public Vector3 horVelocity = Vector3.zero;
     public Vector3 verVelocity = Vector3.zero;
 
-    [SerializeField]
+    public float browsingDistance = 5;
     public float speed = 5;
     public float yLookAngle = 0;
     public float jumpForce = 5;
+    public bool isHoldingItem;
+    public bool isBrowsing;
 
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        stateMachine = new StateMachine(new IdleState(characterController, this));
-        stateMachine.AddState(new WalkState(characterController, this));
-        stateMachine.AddState(new JumpState(characterController, this));
+        stateMachine = new StateMachine(new PlayerState.IdleState(characterController, this));
+        stateMachine.AddState(new PlayerState.WalkState(characterController, this));
+        stateMachine.AddState(new PlayerState.JumpState(characterController, this));
+        stateMachine.AddState(new PlayerState.NotBrowsingState(this));
+        stateMachine.AddState(new PlayerState.BrowsingState(this));
+        stateMachine.AddState(new PlayerState.HoldingState(this));
 
         playerInput = new PlayerInput();
         playerInput.Enable();
@@ -45,6 +50,16 @@ public class PlayerController : MonoBehaviour
         characterController.Move(verVelocity * Time.deltaTime);
         characterController.Move(speed * Time.deltaTime * transform.TransformDirection(horVelocity));
         stateMachine.Update();
+
+        RaycastHit hit;
+        if (Physics.Raycast(Camera.main.transform.position, transform.forward, out hit, browsingDistance))
+        {
+            if (hit.transform.tag == "Item")
+            {
+                Debug.Log("Looking at item");
+            }
+        }
+        Debug.DrawRay(Camera.main.transform.position, transform.forward * browsingDistance, Color.red);
     }
     void FixedUpdate()
     {
