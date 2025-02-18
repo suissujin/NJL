@@ -1,29 +1,38 @@
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class StateMachine : MonoBehaviour
+public class StateMachine
 {
-    private IState currentState;
-    private IState initialState;
-
-    private void Start()
+    public State currentState;
+    public Dictionary<string, State> states = new Dictionary<string, State>();
+    public StateMachine(State initialState)
     {
         currentState = initialState;
+        AddState(initialState);
     }
 
-    public void ChangeState(IState newState)
+    public void ChangeState(string newState)
     {
+        var state = states[newState];
         currentState.Exit();
-        currentState = newState;
+        currentState = state;
         currentState.Enter();
     }
 
-    private void Update()
+    public void Update()
     {
-        currentState.Update();
+        currentState.Process();
     }
 
-    private void FixedUpdate()
+    public void FixedUpdate()
     {
-        currentState.FixedUpdate();
+        currentState.FixedProcess();
+    }
+
+    public void AddState(State state)
+    {
+        state.OnStateChanged.AddListener(ChangeState);
+        states.Add(state.GetType().Name, state);
     }
 }
