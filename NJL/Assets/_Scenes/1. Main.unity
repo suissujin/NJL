@@ -845,8 +845,8 @@ GameObject:
   m_Component:
   - component: {fileID: 705417187}
   - component: {fileID: 705417188}
-  - component: {fileID: 705417190}
   - component: {fileID: 705417189}
+  - component: {fileID: 705417190}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -883,8 +883,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5cadfc4e539f6f45a7afcedff703a10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  walkAction:
+    m_Name: Walk
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 05bfcfe7-0dd1-456d-8be3-3ed1b959b044
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  jumpAction:
+    m_Name: Jump
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 3e02026e-0ea4-4713-9919-c3c5558cc9ee
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  lookAction:
+    m_Name: Look
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 0bda3a3f-250e-44a9-850b-35156c57942e
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
   characterController: {fileID: 705417189}
-  speed: 5
+  horVelocity: {x: 0, y: 0, z: 0}
+  verVelocity: {x: 0, y: 0, z: 0}
+  speed: 3
+  yLookAngle: 0
+  jumpForce: 5
 --- !u!143 &705417189
 CharacterController:
   m_ObjectHideFlags: 0
@@ -910,18 +941,29 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1.1, z: 0}
---- !u!114 &705417190
-MonoBehaviour:
+--- !u!136 &705417190
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705417186}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13ae10e813b389d498cbef8492d18475, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1000159389
 GameObject:
   m_ObjectHideFlags: 0
@@ -1474,9 +1516,9 @@ GameObject:
   - component: {fileID: 1541215810}
   - component: {fileID: 1541215809}
   - component: {fileID: 1541215808}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ground
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

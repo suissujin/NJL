@@ -1,25 +1,37 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
     PlayerInput playerInput;
+    StateMachine stateMachine;
+    public InputAction walkAction;
+    public InputAction jumpAction;
+    public InputAction lookAction;
     [SerializeField]
     CharacterController characterController;
-    Vector3 horVelocity = Vector3.zero;
-    Vector3 verVelocity = Vector3.zero;
+    public Vector3 horVelocity = Vector3.zero;
+    public Vector3 verVelocity = Vector3.zero;
 
     [SerializeField]
-    float speed = 5;
-    float yLookAngle = 0;
+    public float speed = 5;
+    public float yLookAngle = 0;
+    public float jumpForce = 5;
 
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        stateMachine = new StateMachine(new IdleState(characterController, this));
+        stateMachine.AddState(new WalkState(characterController, this));
+        stateMachine.AddState(new JumpState(characterController, this));
+
         playerInput = new PlayerInput();
         playerInput.Enable();
-        playerInput.Player.Walk.performed += ctx => MovePlayer(ctx.ReadValue<Vector2>());
-        playerInput.Player.Jump.performed += ctx => verVelocity.y = 5;
+        walkAction = playerInput.FindAction("Walk");
+        jumpAction = playerInput.FindAction("Jump");
+
         playerInput.Player.Look.performed += ctx => LookAround(ctx.ReadValue<Vector2>());
     }
 
@@ -27,16 +39,22 @@ public class PlayerController : MonoBehaviour
     {
         if (!characterController.isGrounded)
         {
+            //Debug.Log("Not Grounded");
             verVelocity.y += -9.8f * Time.deltaTime;
         }
-        characterController.Move(speed * Time.deltaTime * transform.TransformDirection(horVelocity));
         characterController.Move(verVelocity * Time.deltaTime);
-
+        characterController.Move(speed * Time.deltaTime * transform.TransformDirection(horVelocity));
+        stateMachine.Update();
+    }
+    void FixedUpdate()
+    {
+        stateMachine.FixedUpdate();
     }
 
-    void MovePlayer(Vector2 direction)
+    public void MovePlayer(Vector2 direction)
     {
-        horVelocity = new Vector3(direction.x, horVelocity.z, direction.y);
+        horVelocity = new Vector3(direction.x, 0, direction.y);
+        Debug.Log(horVelocity);
     }
 
     void LookAround(Vector2 direction)
