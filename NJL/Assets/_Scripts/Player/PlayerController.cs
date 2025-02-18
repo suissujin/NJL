@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     PlayerInput playerInput;
-    StateMachine stateMachine;
+    public StateMachine stateMachine;
     public InputAction walkAction;
     public InputAction jumpAction;
     public InputAction lookAction;

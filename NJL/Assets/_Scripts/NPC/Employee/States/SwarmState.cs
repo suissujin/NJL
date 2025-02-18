@@ -2,10 +2,10 @@ using UnityEngine;
 
 namespace Employee
 {
-    public class IdleState : State
+    public class SwarmState : State
     {
         EmployeeBehaviour Employee;
-        public IdleState(EmployeeBehaviour employee)
+        public SwarmState(EmployeeBehaviour employee)
         {
             Employee = employee;
         }
@@ -15,7 +15,11 @@ namespace Employee
         }
         public override void Process()
         {
-            Employee.CooldownTimer(Employee.idleTimer, () => Employee.stateMachine.ChangeState("PatrolState"));
+            Employee.transform.position = Vector3.MoveTowards(Employee.transform.position, Employee.player.transform.position, Employee.speed * Time.deltaTime);
+            if (Employee.player.stateMachine.currentState.GetType() == typeof(PlayerState.NotBrowsingState))
+            {
+                Employee.stateMachine.ChangeState("IdleState");
+            }
         }
         public override void FixedProcess()
         {

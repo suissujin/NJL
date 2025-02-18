@@ -1,12 +1,16 @@
+using System;
+using System.Collections;
+using NUnit.Framework.Internal;
 using UnityEngine;
 
 public class NPCBehaviour : MonoBehaviour
 {
-    protected StateMachine stateMachine;
+    public StateMachine stateMachine;
+    public PlayerController player;
 
     protected virtual void Start()
     {
-
+        player = FindFirstObjectByType<PlayerController>();
     }
 
     protected virtual void Update()
@@ -17,5 +21,15 @@ public class NPCBehaviour : MonoBehaviour
     protected virtual void FixedUpdate()
     {
         stateMachine.FixedUpdate();
+    }
+
+    public void CooldownTimer(float time, Action callback)
+    {
+        time -= Time.deltaTime;
+        if (time <= 0)
+        {
+            callback();
+
+        }
     }
 }
