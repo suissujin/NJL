@@ -4,7 +4,6 @@ namespace PlayerState
 {
     public class IdleState : State
     {
-
         private CharacterController CharacterController;
         private PlayerController Player;
         public IdleState(CharacterController characterController, PlayerController player)

@@ -7,9 +7,8 @@ public class EmployeeBehaviour : NPCBehaviour
     public float speed = 5;
     protected override void Start()
     {
+        base.Start();
         stateMachine = new StateMachine(new Employee.IdleState(this));
-
-        stateMachine.AddState(new Employee.IdleState(this));
         stateMachine.AddState(new Employee.PatrolState(this));
         stateMachine.AddState(new Employee.SwarmState(this));
     }

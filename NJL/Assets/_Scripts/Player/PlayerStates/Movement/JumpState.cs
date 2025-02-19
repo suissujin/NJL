@@ -15,7 +15,11 @@ namespace PlayerState
         public override void Enter()
         {
             Debug.Log("Entering Jump State");
-            Player.verVelocity = Player.jumpForce * Vector3.up;
+            if (Player.groundTimer > 0)
+            {
+                Player.groundTimer = 0;
+                Player.verVelocity += Mathf.Sqrt(Player.jumpForce * Player.gravity);
+            }
         }
 
         public override void Process()
@@ -33,7 +37,7 @@ namespace PlayerState
         public override void Exit()
         {
             Debug.Log("Exiting Jump State");
-            Player.verVelocity = Vector3.zero;
+            Player.verVelocity = 0;
         }
     }
 }
