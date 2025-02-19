@@ -8,9 +8,12 @@ public class EmployeeBehaviour : NPCBehaviour
     protected override void Start()
     {
         base.Start();
-        stateMachine = new StateMachine(new Employee.IdleState(this));
-        stateMachine.AddState(new Employee.PatrolState(this));
-        stateMachine.AddState(new Employee.SwarmState(this));
+
+        stateMachine = new();
+        stateMachine.AddState(new Employee.IdleState(this, stateMachine));
+        stateMachine.AddState(new Employee.PatrolState(this, stateMachine));
+        stateMachine.AddState(new Employee.SwarmState(this, stateMachine));
+        stateMachine.SetState<Employee.IdleState>();
     }
 
     protected override void Update()

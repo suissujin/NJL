@@ -5,7 +5,7 @@ namespace PlayerState
     public class HoldingState : State
     {
         private PlayerController Player;
-        public HoldingState(PlayerController player)
+        public HoldingState(PlayerController player, StateMachine stateMachine) : base(stateMachine)
         {
             Player = player;
         }
@@ -22,11 +22,11 @@ namespace PlayerState
             {
                 if (Player.isBrowsing)
                 {
-                    ChangeState("BrowsingState");
+                    stateMachine.ChangeState<BrowsingState>();
                 }
                 else
                 {
-                    ChangeState("NotBrowsingState");
+                    stateMachine.ChangeState<NotBrowsingState>();
                 }
             }
         }

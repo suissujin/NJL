@@ -5,7 +5,7 @@ namespace PlayerState
     public class NotBrowsingState : State
     {
         private PlayerController Player;
-        public NotBrowsingState(PlayerController player)
+        public NotBrowsingState(PlayerController player, StateMachine stateMachine) : base(stateMachine)
         {
             Player = player;
         }
@@ -19,12 +19,12 @@ namespace PlayerState
         {
             if (Player.isBrowsing)
             {
-                ChangeState("BrowsingState");
+                stateMachine.ChangeState<BrowsingState>();
             }
             else
             if (Player.isHoldingItem)
             {
-                ChangeState("HoldingState");
+                stateMachine.ChangeState<HoldingState>();
             }
         }
 

@@ -5,7 +5,7 @@ namespace Employee
     public class PatrolState : State
     {
         EmployeeBehaviour Employee;
-        public PatrolState(EmployeeBehaviour employee)
+        public PatrolState(EmployeeBehaviour employee, StateMachine stateMachine) : base(stateMachine)
         {
             Employee = employee;
         }
@@ -15,9 +15,9 @@ namespace Employee
         }
         public override void Process()
         {
-            if (Employee.player.stateMachine.currentState.GetType() == typeof(PlayerState.BrowsingState))
+            if (Employee.player.locomotionStateMachine.currentState.GetType() == typeof(PlayerState.BrowsingState))
             {
-                Employee.stateMachine.ChangeState("SwarmState");
+                Employee.stateMachine.ChangeState<SwarmState>();
             }
         }
         public override void FixedProcess()

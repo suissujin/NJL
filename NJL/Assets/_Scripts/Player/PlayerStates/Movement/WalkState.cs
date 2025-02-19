@@ -6,7 +6,7 @@ namespace PlayerState
     {
         private CharacterController CharacterController;
         private PlayerController Player;
-        public WalkState(CharacterController characterController, PlayerController player)
+        public WalkState(CharacterController characterController, PlayerController player, StateMachine stateMachine) : base(stateMachine)
         {
             CharacterController = characterController;
             Player = player;
@@ -21,11 +21,11 @@ namespace PlayerState
             Player.MovePlayer(Player.walkAction.ReadValue<Vector2>());
             if (!Player.walkAction.IsPressed())
             {
-                ChangeState("IdleState");
+                stateMachine.ChangeState<IdleState>();
             }
             if (Player.jumpAction.IsPressed())
             {
-                ChangeState("JumpState");
+                stateMachine.ChangeState<JumpState>();
             }
         }
 

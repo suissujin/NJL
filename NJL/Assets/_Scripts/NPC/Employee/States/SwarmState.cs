@@ -5,7 +5,7 @@ namespace Employee
     public class SwarmState : State
     {
         EmployeeBehaviour Employee;
-        public SwarmState(EmployeeBehaviour employee)
+        public SwarmState(EmployeeBehaviour employee, StateMachine stateMachine) : base(stateMachine)
         {
             Employee = employee;
         }
@@ -16,9 +16,9 @@ namespace Employee
         public override void Process()
         {
             Employee.transform.position = Vector3.MoveTowards(Employee.transform.position, Employee.player.transform.position, Employee.speed * Time.deltaTime);
-            if (Employee.player.stateMachine.currentState.GetType() == typeof(PlayerState.NotBrowsingState))
+            if (Employee.player.interactionStateMachine.currentState.GetType() == typeof(PlayerState.NotBrowsingState))
             {
-                Employee.stateMachine.ChangeState("IdleState");
+                Employee.stateMachine.ChangeState<IdleState>();
             }
         }
         public override void FixedProcess()

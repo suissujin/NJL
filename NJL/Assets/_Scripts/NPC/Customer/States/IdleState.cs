@@ -5,7 +5,7 @@ namespace Customer
     public class IdleState : State
     {
         CustomerBehaviour Customer;
-        public IdleState(CustomerBehaviour customer)
+        public IdleState(CustomerBehaviour customer, StateMachine stateMachine) : base(stateMachine)
         {
             Customer = customer;
         }

@@ -7,26 +7,30 @@ namespace PlayerState
     {
         private CharacterController CharacterController;
         private PlayerController Player;
-        public JumpState(CharacterController characterController, PlayerController player)
+        private Vector3 horizontalVelocity;
+        public JumpState(CharacterController characterController, PlayerController player, StateMachine stateMachine) : base(stateMachine)
         {
             CharacterController = characterController;
             Player = player;
         }
         public override void Enter()
         {
+            horizontalVelocity = Player.horVelocity;
             Debug.Log("Entering Jump State");
-            if (Player.groundTimer > 0)
+            if (Player.isGrounded)
             {
-                Player.groundTimer = 0;
+                Player.groundTimer = 0.25f;
                 Player.verVelocity += Mathf.Sqrt(Player.jumpForce * Player.gravity);
             }
         }
 
         public override void Process()
         {
+            horizontalVelocity *= 0.98f;
+            Player.horVelocity = horizontalVelocity;
             if (CharacterController.isGrounded)
             {
-                ChangeState("IdleState");
+                stateMachine.ChangeState<IdleState>();
             }
         }
 

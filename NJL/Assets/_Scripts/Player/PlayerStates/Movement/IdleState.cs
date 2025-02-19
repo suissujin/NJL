@@ -6,13 +6,18 @@ namespace PlayerState
     {
         private CharacterController CharacterController;
         private PlayerController Player;
-        public IdleState(CharacterController characterController, PlayerController player)
+        public IdleState(CharacterController characterController, PlayerController player, StateMachine stateMachine) : base(stateMachine)
         {
             CharacterController = characterController;
             Player = player;
         }
         public override void Enter()
         {
+            if (Player.walkAction.IsPressed())
+            {
+                stateMachine.ChangeState<WalkState>();
+            }
+            else { Player.horVelocity = Vector3.zero; }
             Debug.Log("Entering Idle State");
         }
 
@@ -20,11 +25,11 @@ namespace PlayerState
         {
             if (Player.walkAction.IsPressed())
             {
-                ChangeState("WalkState");
+                stateMachine.ChangeState<WalkState>();
             }
             if (Player.jumpAction.IsPressed())
             {
-                ChangeState("JumpState");
+                stateMachine.ChangeState<JumpState>();
             }
         }
 

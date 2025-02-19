@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -5,16 +6,20 @@ using UnityEngine;
 public class StateMachine
 {
     public State currentState;
-    public Dictionary<string, State> states = new Dictionary<string, State>();
-    public StateMachine(State initialState)
+    public Dictionary<Type, State> states = new Dictionary<Type, State>();
+    public bool IsCurrentStateOfType<T>() where T : State
     {
-        currentState = initialState;
-        AddState(initialState);
+        return currentState.GetType() == typeof(T);
     }
 
-    public void ChangeState(string newState)
+    public void SetState<T>() where T : State
     {
-        var state = states[newState];
+        currentState = states[typeof(T)];
+    }
+
+    public void ChangeState<T>() where T : State
+    {
+        var state = states[typeof(T)];
         currentState.Exit();
         currentState = state;
         currentState.Enter();
@@ -32,7 +37,6 @@ public class StateMachine
 
     public void AddState(State state)
     {
-        state.OnStateChanged.AddListener(ChangeState);
-        states.Add(state.GetType().Name, state);
+        states.Add(state.GetType(), state);
     }
 }
