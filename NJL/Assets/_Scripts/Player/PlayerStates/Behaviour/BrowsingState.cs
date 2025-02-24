@@ -22,7 +22,7 @@ namespace PlayerState
                     stateMachine.ChangeState<NotBrowsingState>();
                 }
             }
-            if (Player.isHoldingItem)
+            if (Player.interactAction.IsPressed())
             {
                 stateMachine.ChangeState<HoldingState>();
             }

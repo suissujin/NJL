@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.TextCore.Text;
@@ -10,6 +11,10 @@ public class PlayerController : MonoBehaviour
     public InputAction walkAction;
     public InputAction jumpAction;
     public InputAction lookAction;
+    public InputAction interactAction;
+    public GameObject itemLookingAt;
+    public GameObject itemHeld;
+    public GameObject holdingPosition;
     [SerializeField]
     CharacterController characterController;
     public Vector3 horVelocity = Vector3.zero;
@@ -48,6 +53,7 @@ public class PlayerController : MonoBehaviour
         playerInput.Enable();
         walkAction = playerInput.FindAction("Walk");
         jumpAction = playerInput.FindAction("Jump");
+        interactAction = playerInput.FindAction("Interact");
 
         playerInput.Player.Look.performed += ctx => LookAround(ctx.ReadValue<Vector2>());
     }
@@ -72,10 +78,11 @@ public class PlayerController : MonoBehaviour
         {
             if (hit.transform.CompareTag("Item"))
             {
+                itemLookingAt = hit.transform.gameObject;
                 isBrowsing = true;
                 Debug.Log("Looking at item");
             }
-            else { isBrowsing = false; }
+            else { itemLookingAt = null; isBrowsing = false; }
         }
         Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * browsingDistance, Color.red);
 
@@ -100,5 +107,11 @@ public class PlayerController : MonoBehaviour
         transform.Rotate(Vector3.up * direction.x);
         yLookAngle = Mathf.Clamp(yLookAngle - direction.y, -90, 90);
         Camera.main.transform.localRotation = Quaternion.Euler(yLookAngle, 0, 0);
+    }
+
+    void OnDrawGizmos()
+    {
+        Handles.Label(transform.position + Vector3.up * 3, "Locomotion State: " + locomotionStateMachine.currentState.GetType().Name);
+        Handles.Label(transform.position + Vector3.up * 2, "Interaction State: " + interactionStateMachine.currentState.GetType().Name);
     }
 }

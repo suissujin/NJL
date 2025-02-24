@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace PlayerState
@@ -12,13 +13,15 @@ namespace PlayerState
 
         public override void Enter()
         {
-            //assing picked up object as child to player
+            Player.itemHeld = Player.itemLookingAt;
+            Player.itemHeld.transform.SetParent(Player.holdingPosition.transform);
+            Player.itemHeld.transform.localPosition = Vector3.zero;
             Debug.Log("Entering Holding State");
         }
 
         public override void Process()
         {
-            if (!Player.isHoldingItem)
+            if (Player.interactAction.IsPressed())
             {
                 if (Player.isBrowsing)
                 {
@@ -38,7 +41,8 @@ namespace PlayerState
 
         public override void Exit()
         {
-            //clear child object from player
+            Player.holdingPosition.transform.DetachChildren();
+            Player.itemHeld = null;
             Debug.Log("Exiting Holding State");
         }
     }
