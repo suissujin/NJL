@@ -37,7 +37,7 @@ public class EmployeeBehaviour : NPCBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, speed * Time.deltaTime);
     }
 
-    void OnawGizmos()
+    void OnDrawGizmos()
     {
         Handles.Label(transform.position + Vector3.up * 3, "Current State: " + stateMachine.currentState.GetType().Name);
     }

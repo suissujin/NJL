@@ -11,11 +11,11 @@ namespace Employee
         }
         public override void Enter()
         {
-            Debug.Log("Entering Idle State");
+            Debug.Log("Entering Patrol State");
         }
         public override void Process()
         {
-            if (Employee.player.locomotionStateMachine.currentState.GetType() == typeof(PlayerState.BrowsingState))
+            if (Employee.player.locomotionStateMachine.currentState.GetType() == typeof(PlayerState.BrowsingState) || Employee.player.locomotionStateMachine.currentState.GetType() == typeof(PlayerState.HoldingState))
             {
                 Employee.stateMachine.ChangeState<SwarmState>();
             }
@@ -26,7 +26,7 @@ namespace Employee
         }
         public override void Exit()
         {
-            Debug.Log("Exiting Idle State");
+            Debug.Log("Exiting Patrol State");
         }
     }
 }
