@@ -16,6 +16,7 @@ public class EmployeeBehaviour : NPCBehaviour
         stateMachine.AddState(new Employee.IdleState(this, stateMachine));
         stateMachine.AddState(new Employee.PatrolState(this, stateMachine));
         stateMachine.AddState(new Employee.SwarmState(this, stateMachine));
+        stateMachine.AddState(new Employee.ConsultingState(this, stateMachine));
         stateMachine.SetState<Employee.IdleState>();
     }
 

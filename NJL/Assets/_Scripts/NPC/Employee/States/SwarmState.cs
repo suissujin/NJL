@@ -16,8 +16,7 @@ namespace Employee
         public override void Process()
         {
             Employee.transform.position = Vector3.MoveTowards(Employee.transform.position, Employee.player.transform.position, Employee.speed * Time.deltaTime);
-            if (
-                Vector3.Distance(Employee.transform.position, Employee.player.transform.position) < 1.5f)
+            if (Vector3.Distance(Employee.transform.position, Employee.player.transform.position) < 1.5f)
             {
                 Employee.stateMachine.ChangeState<ConsultingState>();
             }
