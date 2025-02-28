@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     public GameObject itemLookingAt;
     public GameObject itemHeld;
     public GameObject holdingPosition;
+    public GameObject cameraDolly;
 
     [SerializeField] CharacterController characterController;
 
@@ -31,7 +32,8 @@ public class PlayerController : MonoBehaviour
 
     [Range(0.01f, 1)] public float sensitivity;
 
-    Camera fpsCamera;
+    [SerializeField] Camera fpsCamera;
+
     public StateMachine interactionStateMachine;
     public StateMachine locomotionStateMachine;
     PlayerInput playerInput;
@@ -60,7 +62,6 @@ public class PlayerController : MonoBehaviour
         jumpAction = playerInput.FindAction("Jump");
         interactAction = playerInput.FindAction("Interact");
 
-        fpsCamera = Camera.main;
         playerInput.Player.Look.performed += ctx => LookAround(ctx.ReadValue<Vector2>() * sensitivity);
     }
 
@@ -121,6 +122,6 @@ public class PlayerController : MonoBehaviour
     {
         transform.Rotate(Vector3.up * direction.x);
         yLookAngle = Mathf.Clamp(yLookAngle - direction.y, -90, 90);
-        fpsCamera.transform.localRotation = Quaternion.Euler(yLookAngle, 0, 0);
+        cameraDolly.transform.localRotation = Quaternion.Euler(yLookAngle, 0, 0);
     }
 }

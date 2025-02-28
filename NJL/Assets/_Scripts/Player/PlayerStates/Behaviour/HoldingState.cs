@@ -18,7 +18,7 @@ namespace PlayerState
             Player.itemHeld.transform.SetParent(Player.holdingPosition.transform);
             Player.itemHeld.transform.localPosition = Vector3.zero;
             Player.itemHeld.GetComponent<Rigidbody>().isKinematic = true;
-            Player.itemHeld.GameObject().layer = LayerMask.NameToLayer("FPSLayer");
+            Player.itemHeld.transform.GetChild(0).GameObject().layer = LayerMask.NameToLayer("FPSLayer");
             Debug.Log("Entering Holding State");
         }
 
@@ -42,7 +42,7 @@ namespace PlayerState
         {
             Player.holdingPosition.transform.DetachChildren();
             Player.itemHeld.GetComponent<Rigidbody>().isKinematic = false;
-            Player.itemHeld.GameObject().layer = LayerMask.NameToLayer("Default");
+            Player.itemHeld.transform.GetChild(0).GameObject().layer = LayerMask.NameToLayer("Default");
             Player.itemHeld = null;
             Debug.Log("Exiting Holding State");
         }
