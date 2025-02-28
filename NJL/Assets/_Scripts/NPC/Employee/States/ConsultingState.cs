@@ -1,10 +1,12 @@
+using PlayerState;
 using UnityEngine;
 
 namespace Employee
 {
     public class ConsultingState : State
     {
-        EmployeeBehaviour Employee;
+        readonly EmployeeBehaviour Employee;
+
         public ConsultingState(EmployeeBehaviour employee, StateMachine stateMachine) : base(stateMachine)
         {
             Employee = employee;
@@ -18,10 +20,11 @@ namespace Employee
         public override void Process()
         {
             Employee.LookAtPlayer();
-            if (Employee.player.interactionStateMachine.currentState.GetType() == typeof(PlayerState.NotBrowsingState))
-            {
+            if (Vector3.Distance(Employee.transform.position, Employee.player.transform.position) >
+                Employee.talkingDistance)
+                Employee.stateMachine.ChangeState<SwarmState>();
+            if (Employee.player.interactionStateMachine.currentState.GetType() == typeof(NotBrowsingState))
                 Employee.stateMachine.ChangeState<IdleState>();
-            }
         }
 
         public override void FixedProcess()
@@ -33,6 +36,5 @@ namespace Employee
         {
             Debug.Log("Exiting Consulting State");
         }
-
     }
 }
