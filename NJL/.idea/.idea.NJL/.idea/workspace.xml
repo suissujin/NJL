@@ -9,6 +9,8 @@
       <change beforePath="$PROJECT_DIR$/Assets/_Scenes/1. Main.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Scenes/1. Main.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_Scripts/Player/PlayerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Scripts/Player/PlayerController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_Scripts/Player/PlayerStates/Behaviour/HoldingState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Scripts/Player/PlayerStates/Behaviour/HoldingState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +25,7 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/d6f576415dfd4add8f23aa1d383d68cc1f9200/9b/e6f289c5/LayoutDataStore.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fde3c13fb32a45329a891b3df03f79081dee00/08/57255299/GameObject.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.high-definition@c87ac1e432a3/Runtime/Compositor/CompositionLayer.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
@@ -104,6 +107,7 @@
       <updated>1740738752604</updated>
       <workItem from="1740738754762" duration="12678000" />
       <workItem from="1740752155183" duration="7660000" />
+      <workItem from="1740918250641" duration="1819000" />
     </task>
     <servers />
   </component>

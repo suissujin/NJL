@@ -31,8 +31,7 @@ public class PlayerController : MonoBehaviour
     public bool isBrowsing;
 
     [Range(0.01f, 1)] public float sensitivity;
-
-    [SerializeField] Camera fpsCamera;
+    public Camera camera;
 
     public StateMachine interactionStateMachine;
     public StateMachine locomotionStateMachine;
@@ -41,6 +40,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        camera = Camera.main;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
@@ -77,7 +77,7 @@ public class PlayerController : MonoBehaviour
         velocity.y = verVelocity;
         characterController.Move(Time.deltaTime * velocity);
 
-        if (Physics.Raycast(fpsCamera.transform.position, fpsCamera.transform.forward, out var hit,
+        if (Physics.Raycast(camera.transform.position, camera.transform.forward, out var hit,
                 browsingDistance))
         {
             if (hit.transform.CompareTag("Item"))
@@ -93,7 +93,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        Debug.DrawRay(fpsCamera.transform.position, fpsCamera.transform.forward * browsingDistance, Color.red);
+        Debug.DrawRay(camera.transform.position, camera.transform.forward * browsingDistance, Color.red);
 
         if (groundTimer > 0) groundTimer -= Time.deltaTime;
     }

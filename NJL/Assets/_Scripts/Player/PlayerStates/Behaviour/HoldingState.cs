@@ -17,6 +17,7 @@ namespace PlayerState
             Player.itemHeld = Player.itemLookingAt;
             Player.itemHeld.transform.SetParent(Player.holdingPosition.transform);
             Player.itemHeld.transform.localPosition = Vector3.zero;
+            Player.itemHeld.transform.localRotation = Quaternion.identity;
             Player.itemHeld.GetComponent<Rigidbody>().isKinematic = true;
             Player.itemHeld.transform.GetChild(0).GameObject().layer = LayerMask.NameToLayer("FPSLayer");
             Debug.Log("Entering Holding State");
