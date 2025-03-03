@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
     public float yLookAngle;
     public float jumpForce = 5;
     public float gravity = 20;
+    public float launchSpeed = 2;
 
     public float groundTimer;
 

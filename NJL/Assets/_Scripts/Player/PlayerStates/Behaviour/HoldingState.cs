@@ -42,7 +42,9 @@ namespace PlayerState
         public override void Exit()
         {
             Player.holdingPosition.transform.DetachChildren();
+            Player.itemHeld.transform.position = Player.cameraDolly.transform.position; 
             Player.itemHeld.GetComponent<Rigidbody>().isKinematic = false;
+            Player.itemHeld.GetComponent<Rigidbody>().linearVelocity = Player.itemHeld.transform.forward * Player.launchSpeed;
             Player.itemHeld.transform.GetChild(0).GameObject().layer = LayerMask.NameToLayer("Default");
             Player.itemHeld = null;
             Debug.Log("Exiting Holding State");

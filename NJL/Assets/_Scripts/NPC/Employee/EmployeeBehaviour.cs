@@ -24,7 +24,6 @@ public class EmployeeBehaviour : NPCBehaviour
     protected override void Update()
     {
         base.Update();
-        Debug.Log(head.transform.localEulerAngles.y);
     }
 
     protected override void FixedUpdate()
