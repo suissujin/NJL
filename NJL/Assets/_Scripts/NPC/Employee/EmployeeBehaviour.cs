@@ -7,6 +7,7 @@ public class EmployeeBehaviour : NPCBehaviour
     public float idleTimer = 5;
     public float speed = 5;
     public float talkingDistance = 5;
+    public GameObject head;
 
     protected override void Start()
     {
@@ -23,6 +24,7 @@ public class EmployeeBehaviour : NPCBehaviour
     protected override void Update()
     {
         base.Update();
+        Debug.Log(head.transform.localEulerAngles.y);
     }
 
     protected override void FixedUpdate()
@@ -39,9 +41,13 @@ public class EmployeeBehaviour : NPCBehaviour
 
     public void LookAtPlayer()
     {
-        var direction = player.transform.position - transform.position;
-        var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        var rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, speed * Time.deltaTime);
+        var newLookAngle = transform.localRotation;
+        head.transform.LookAt(player.camera.transform);
+        if (head.transform.localEulerAngles.y is > 90 and < 180)
+            newLookAngle = Quaternion.Euler(0, head.transform.eulerAngles.y - 90, 0);
+
+        if (head.transform.localEulerAngles.y is < 270 and > 180)
+            newLookAngle = Quaternion.Euler(0, head.transform.eulerAngles.y + 90, 0);
+        transform.localRotation = Quaternion.Slerp(transform.localRotation, newLookAngle, Time.deltaTime * 5);
     }
 }
