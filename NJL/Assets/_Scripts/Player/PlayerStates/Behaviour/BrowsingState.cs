@@ -4,7 +4,8 @@ namespace PlayerState
 {
     public class BrowsingState : State
     {
-        private PlayerController Player;
+        readonly PlayerController Player;
+
         public BrowsingState(PlayerController player, StateMachine stateMachine) : base(stateMachine)
         {
             Player = player;
@@ -14,18 +15,12 @@ namespace PlayerState
         {
             Debug.Log("Entering Browsing State");
         }
+
         public override void Process()
         {
-            if (!Player.isBrowsing)
-            {
-                {
-                    stateMachine.ChangeState<NotBrowsingState>();
-                }
-            }
-            if (Player.interactAction.IsPressed())
-            {
-                stateMachine.ChangeState<HoldingState>();
-            }
+            if (!Player.isBrowsing) stateMachine.ChangeState<NotBrowsingState>();
+
+            if (Player.interactAction.WasPressedThisFrame()) stateMachine.ChangeState<HoldingState>();
         }
 
         public override void FixedProcess()

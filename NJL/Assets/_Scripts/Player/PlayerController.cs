@@ -1,13 +1,10 @@
+using PlayerState;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.TextCore.Text;
 
 public class PlayerController : MonoBehaviour
 {
-    PlayerInput playerInput;
-    public StateMachine locomotionStateMachine;
-    public StateMachine interactionStateMachine;
     public InputAction walkAction;
     public InputAction jumpAction;
     public InputAction lookAction;
@@ -15,39 +12,50 @@ public class PlayerController : MonoBehaviour
     public GameObject itemLookingAt;
     public GameObject itemHeld;
     public GameObject holdingPosition;
-    [SerializeField]
-    CharacterController characterController;
+    public GameObject cameraDolly;
+
+    [SerializeField] CharacterController characterController;
+
     public Vector3 horVelocity = Vector3.zero;
     public float verVelocity;
 
     public float browsingDistance = 5;
     public float speed = 5;
-    public float yLookAngle = 0;
+    public float yLookAngle;
     public float jumpForce = 5;
     public float gravity = 20;
+    public float launchSpeed = 2;
 
     public float groundTimer;
 
     public bool isHoldingItem;
-    public bool isGrounded => characterController.isGrounded && groundTimer <= 0;
     public bool isBrowsing;
+
+    [Range(0.01f, 1)] public float sensitivity;
+    public Camera camera;
+
+    public StateMachine interactionStateMachine;
+    public StateMachine locomotionStateMachine;
+    PlayerInput playerInput;
+    public bool isGrounded => characterController.isGrounded && groundTimer <= 0;
 
     void Start()
     {
+        camera = Camera.main;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        locomotionStateMachine = new();
-        locomotionStateMachine.AddState(new PlayerState.IdleState(characterController, this, locomotionStateMachine));
-        locomotionStateMachine.AddState(new PlayerState.WalkState(characterController, this, locomotionStateMachine));
-        locomotionStateMachine.AddState(new PlayerState.JumpState(characterController, this, locomotionStateMachine));
-        locomotionStateMachine.SetState<PlayerState.IdleState>();
+        locomotionStateMachine = new StateMachine();
+        locomotionStateMachine.AddState(new IdleState(characterController, this, locomotionStateMachine));
+        locomotionStateMachine.AddState(new WalkState(characterController, this, locomotionStateMachine));
+        locomotionStateMachine.AddState(new JumpState(characterController, this, locomotionStateMachine));
+        locomotionStateMachine.SetState<IdleState>();
 
-        interactionStateMachine = new();
-        interactionStateMachine.AddState(new PlayerState.NotBrowsingState(this, interactionStateMachine));
-        interactionStateMachine.AddState(new PlayerState.BrowsingState(this, interactionStateMachine));
-        interactionStateMachine.AddState(new PlayerState.HoldingState(this, interactionStateMachine));
-        interactionStateMachine.SetState<PlayerState.NotBrowsingState>();
+        interactionStateMachine = new StateMachine();
+        interactionStateMachine.AddState(new NotBrowsingState(this, interactionStateMachine));
+        interactionStateMachine.AddState(new BrowsingState(this, interactionStateMachine));
+        interactionStateMachine.AddState(new HoldingState(this, interactionStateMachine));
+        interactionStateMachine.SetState<NotBrowsingState>();
 
         playerInput = new PlayerInput();
         playerInput.Enable();
@@ -55,7 +63,7 @@ public class PlayerController : MonoBehaviour
         jumpAction = playerInput.FindAction("Jump");
         interactAction = playerInput.FindAction("Interact");
 
-        playerInput.Player.Look.performed += ctx => LookAround(ctx.ReadValue<Vector2>());
+        playerInput.Player.Look.performed += ctx => LookAround(ctx.ReadValue<Vector2>() * sensitivity);
     }
 
     void Update()
@@ -63,18 +71,15 @@ public class PlayerController : MonoBehaviour
         locomotionStateMachine.Update();
         interactionStateMachine.Update();
         if (isGrounded)
-        {
             verVelocity = -1;
-        }
         else
-        {
             verVelocity -= gravity * Time.deltaTime;
-        }
-        Vector3 velocity = transform.TransformDirection(horVelocity);
+        var velocity = transform.TransformDirection(horVelocity);
         velocity.y = verVelocity;
         characterController.Move(Time.deltaTime * velocity);
 
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, browsingDistance))
+        if (Physics.Raycast(camera.transform.position, camera.transform.forward, out var hit,
+                browsingDistance))
         {
             if (hit.transform.CompareTag("Item"))
             {
@@ -82,19 +87,31 @@ public class PlayerController : MonoBehaviour
                 isBrowsing = true;
                 Debug.Log("Looking at item");
             }
-            else { itemLookingAt = null; isBrowsing = false; }
+            else
+            {
+                itemLookingAt = null;
+                isBrowsing = false;
+            }
         }
-        Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * browsingDistance, Color.red);
 
-        if (groundTimer > 0)
-        {
-            groundTimer -= Time.deltaTime;
-        }
+        Debug.DrawRay(camera.transform.position, camera.transform.forward * browsingDistance, Color.red);
+
+        if (groundTimer > 0) groundTimer -= Time.deltaTime;
     }
+
     void FixedUpdate()
     {
         locomotionStateMachine.FixedUpdate();
         interactionStateMachine.FixedUpdate();
+    }
+
+    void OnDrawGizmos()
+    {
+        if (!Application.isPlaying) return;
+        Handles.Label(transform.position + Vector3.up * 3,
+            "Locomotion State: " + locomotionStateMachine.currentState.GetType().Name);
+        Handles.Label(transform.position + Vector3.up * 2,
+            "Interaction State: " + interactionStateMachine.currentState.GetType().Name);
     }
 
     public void MovePlayer(Vector2 direction)
@@ -106,12 +123,6 @@ public class PlayerController : MonoBehaviour
     {
         transform.Rotate(Vector3.up * direction.x);
         yLookAngle = Mathf.Clamp(yLookAngle - direction.y, -90, 90);
-        Camera.main.transform.localRotation = Quaternion.Euler(yLookAngle, 0, 0);
-    }
-
-    void OnDrawGizmos()
-    {
-        Handles.Label(transform.position + Vector3.up * 3, "Locomotion State: " + locomotionStateMachine.currentState.GetType().Name);
-        Handles.Label(transform.position + Vector3.up * 2, "Interaction State: " + interactionStateMachine.currentState.GetType().Name);
+        cameraDolly.transform.localRotation = Quaternion.Euler(yLookAngle, 0, 0);
     }
 }
