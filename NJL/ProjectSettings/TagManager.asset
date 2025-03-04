@@ -9,6 +9,8 @@ TagManager:
   - Customer
   - NPC
   - Item
+  - perfume
+  - SmellScore
   layers:
   - Default
   - TransparentFX
@@ -20,7 +22,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - hand
   - 
   - 
   - 
